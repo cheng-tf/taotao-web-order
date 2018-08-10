@@ -22,20 +22,33 @@
             <artifactId>taotao-web-order-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- taotao-item -->
         <dependency>
-            <groupId>com.taotao.shop</groupId>
+            <groupId>com.taotao.springboot</groupId>
             <artifactId>taotao-item-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- taotao-sso -->
+        <dependency>
+            <groupId>com.taotao.springboot</groupId>
+            <artifactId>taotao-sso-domain</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.taotao.shop</groupId>
-            <artifactId>taotao-order-export</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.taotao.shop</groupId>
+            <groupId>com.taotao.springboot</groupId>
             <artifactId>taotao-sso-export</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- taotao-order -->
+        <dependency>
+            <groupId>com.taotao.springboot</groupId>
+            <artifactId>taotao-order-domain</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.taotao.springboot</groupId>
+            <artifactId>taotao-order-export</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Spring -->
         <dependency>

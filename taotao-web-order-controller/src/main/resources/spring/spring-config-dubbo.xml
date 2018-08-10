@@ -17,9 +17,9 @@
 	<!-- 消费者应用信息，用于计算依赖关系 -->
 	<dubbo:application name="taotao-web-order"/>
 	<!-- 注册中心 -->
-	<dubbo:registry protocol="zookeeper" address="192.168.157.128:2181"/>
+	<dubbo:registry protocol="zookeeper" address="47.106.221.183:2181"/>
 	<!-- 引用Dubbo服务 -->
-	<dubbo:reference interface="com.taotao.shop.order.export.OrderResource" id="orderResource" />
-	<dubbo:reference interface="com.taotao.shop.sso.export.UserResource" id="userResource" />
+	<dubbo:reference interface="com.taotao.springboot.sso.export.UserResource" id="userResource" />
+	<dubbo:reference interface="com.taotao.springboot.order.export.OrderResource" id="orderResource" />
 
 </beans>

@@ -1,13 +1,13 @@
 package com.taotao.shop.web.order.controller;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.taotao.shop.item.domain.pojo.TbItem;
-import com.taotao.shop.order.domain.request.OrderInfo;
-import com.taotao.shop.order.domain.result.TaotaoResult;
-import com.taotao.shop.order.export.OrderResource;
-import com.taotao.shop.sso.domain.pojo.TbUser;
 import com.taotao.shop.web.order.common.utils.CookieUtils;
 import com.taotao.shop.web.order.common.utils.JacksonUtils;
+import com.taotao.springboot.item.domain.pojo.TbItem;
+import com.taotao.springboot.order.domain.request.OrderInfo;
+import com.taotao.springboot.order.domain.result.TaotaoResult;
+import com.taotao.springboot.order.export.OrderResource;
+import com.taotao.springboot.sso.domain.pojo.TbUser;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
