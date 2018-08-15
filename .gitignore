@@ -8,8 +8,9 @@
 log.path_IS_UNDEFINED
 .idea
 *.iml
-*log*
-#*git*
+log.*/
+logs/
+.git/
 taotao-*/.settings
 taotao-*/target
 taotao-*/bin

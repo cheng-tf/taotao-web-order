@@ -1,14 +1,16 @@
-package com.taotao.shop.web.order.controller;
+package com.taotao.springboot.web.order.controller;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.taotao.shop.web.order.common.utils.CookieUtils;
-import com.taotao.shop.web.order.common.utils.JacksonUtils;
 import com.taotao.springboot.item.domain.pojo.TbItem;
 import com.taotao.springboot.order.domain.request.OrderInfo;
 import com.taotao.springboot.order.domain.result.TaotaoResult;
 import com.taotao.springboot.order.export.OrderResource;
 import com.taotao.springboot.sso.domain.pojo.TbUser;
+import com.taotao.springboot.web.order.common.utils.CookieUtils;
+import com.taotao.springboot.web.order.common.utils.JacksonUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,8 @@ import java.util.List;
 @Controller
 public class OrderController {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
+
     @Autowired
     private OrderResource orderResource;
 
@@ -38,49 +43,54 @@ public class OrderController {
     private String CART_KEY;
 
     /**
-     * 展示订单确认页面
+     * 订单确认
      */
-    @RequestMapping("/order/order-cart")
+    @RequestMapping("/order")
     public String showOrderCart(HttpServletRequest request) {
-        //用户必须是登录状态
-        //取用户id
+        log.info("订单确认");
+        // #1 用户必须登录
         TbUser user = (TbUser) request.getAttribute("user");
-        System.out.println(user.getUsername());
-        //根据用户信息取收货地址列表，使用静态数据。
-        //把收货地址列表取出传递给页面
-        //从cookie中取购物车商品列表展示到页面
+        log.info("订单确认 用户名={}", user.getUsername());
+        // #2 根据用户信息，获取收货地址列表（使用静态数据），传递给页面
+        // #3 从Cookie中，获取购物车商品列表
         List<TbItem> cartList = getCartItemList(request);
+        log.info("订单确认 购物车={}", JacksonUtils.objectToJson(cartList));
+        if(cartList==null || cartList.isEmpty()) {
+            return "redirect:http://localhost:8086";
+        }
         request.setAttribute("cartList", cartList);
-        //返回逻辑视图
-        return "order-cart";
+        return "order";
     }
 
+    // 从Cookie中，获取购物车商品列表
     private List<TbItem> getCartItemList(HttpServletRequest request) {
-        //从cookie中取购物车商品列表
         String json = CookieUtils.getCookieValue(request, CART_KEY, true);
         if (StringUtils.isBlank(json)) {
-            //如果没有内容，返回一个空的列表
             return new ArrayList<>();
         }
-        List<TbItem> list = JacksonUtils.jsonToList(json, TbItem.class);
-        return list;
+        return JacksonUtils.jsonToList(json, TbItem.class);
     }
 
     /**
-     * 生成订单处理
+     * 下单
      */
-    @RequestMapping(value="/order/create", method= RequestMethod.POST)
-    public String createOrder(OrderInfo orderInfo, Model model) {
-        //生成订单
+    @RequestMapping(value="/create", method= RequestMethod.POST)
+    public String createOrder(OrderInfo orderInfo, Model model,
+                              HttpServletRequest request, HttpServletResponse response) {
+        log.info("下单, orderInfo={}", JacksonUtils.objectToJson(orderInfo));
+        // #1 下单
         TaotaoResult result = orderResource.createOrder(orderInfo);
-        //返回逻辑视图
+        log.info("下单, res={}", JacksonUtils.objectToJson(result));
+        // #2 清空购物车
+        CookieUtils.deleteCookie(request, response, CART_KEY);
+        // #3 返辑视图
         model.addAttribute("orderId", result.getData().toString());
         model.addAttribute("payment", orderInfo.getPayment());
-        //预计送达时间，预计三天后送达
+        // #4 预计送达时间，默认3天之后
         DateTime dateTime = new DateTime();
         dateTime = dateTime.plusDays(3);
         model.addAttribute("date", dateTime.toString("yyyy-MM-dd"));
-
         return "success";
     }
+
 }
