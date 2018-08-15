@@ -26,6 +26,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	
 	@Value("${TOKEN_KEY}")
 	private String TOKEN_KEY;
+
 	@Value("${SSO_URL}")
 	private String SSO_URL;
 	
